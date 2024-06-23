@@ -2,15 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: hitcounter
-  labels:
-    app: hitcounter
 spec:
   replicas: 1
-  strategy:
-    type: RollingUpdate
-    rollingUpdate:
-      maxSurge: 2
-      maxUnavailable: 0  
   selector:
     matchLabels:
       app: hitcounter
@@ -19,25 +12,11 @@ spec:
       labels:
         app: hitcounter
     spec:
-      restartPolicy: Always
       containers:
       - name: hitcounter
-        image: cluster-registry:32000/hitcounter:1.0
-        # image: hitcounter
-        imagePullPolicy: IfNotPresent
+        image: 211125698594.dkr.ecr.us-east-1.amazonaws.com/hitcounter:1.0-amd64
+        env:
+        - name: DATABASE_URI
+          value: "redis://redis:6379"
         ports:
         - containerPort: 8080
-          protocol: TCP
-        env:
-          - name: DATABASE_URI
-            valueFrom:
-              secretKeyRef:
-                name: redis-creds
-                key: uri
-        resources:
-          limits:
-            cpu: "0.25"
-            memory: "64Mi"
-          requests:
-            cpu: "0.10"
-            memory: "32Mi"

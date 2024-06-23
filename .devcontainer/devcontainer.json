@@ -21,5 +21,10 @@
     // "customizations": {},
 
     // Uncomment to connect as an existing user other than the container default. More info: https://aka.ms/dev-containers-non-root.
-    "remoteUser": "root"
+    "remoteUser": "root",
+    
+    // Bind mount the Docker socket
+    "mounts": [
+        "source=/var/run/docker.sock,target=/var/run/docker.sock,type=bind"
+    ]
 }
